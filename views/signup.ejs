@@ -43,6 +43,9 @@
                 emailError.textContent = data.errors.email ?? "";
                 passwordError.textContent = data.errors.password ?? "";
             }
+            if (data.user){
+                location.assign('/')
+            }
         }catch (e){
             console.log(e)
         }
