@@ -3,7 +3,20 @@ const jwt = require('jsonwebtoken')
 require('dotenv/config')
 
 const handleErrors = (err) => {
+
+    console.log(err.message)
     let errors = {email: "", password: ""}
+
+    if (err.message === "Incorrect email"){
+        errors["email"] = err.message
+
+        return errors;
+    }
+
+    if (err.message === "Incorrect password"){
+        errors["password"] = err.message
+        return errors;
+    }
 
     if (err.code === 11000){
         errors["email"] = "Email already taken"
@@ -58,6 +71,8 @@ module.exports.login_post = async (req, res) => {
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         res.status(200).json({ user: user._id });
     }catch(e){
-        res.status(422).json({})
+        const errors = handleErrors(e)
+
+        res.status(422).json({errors})
     }
 }
